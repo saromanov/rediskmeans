@@ -1,7 +1,15 @@
 import redis
 from sklearn.cluster import KMeans
 import struct
+from sklearn.feature_extraction.text import TfidfTransformer
 
+
+class TFIDF:
+    def __init__(self):
+        pass
+
+    def apply(self, data):
+        return TfidfTransformer().fit_transform(data)
 
 class RedisKMeans:
 
