@@ -16,7 +16,7 @@ class RedisKMeans:
     def put(self, key, values):
         #Checker before store in redis need to recogize type of objects in values
         checker = lambda x: all([isinstance(value, x) for value in values])
-        if checker(float) or checker(string) or checker(int):
+        if checker(float) or checker(str) or checker(int):
             self.client.lpush(key, self._preprocess(values))
             return
         raise TypeError("Not recoginzed type of values")
@@ -32,11 +32,14 @@ class RedisKMeans:
         splitter = values.split()
         return list(map(float, splitter))
 
-    def _getValues(self, keyvalues):
+    def _getValues(self, keyvalues, postprocess=True):
         for (key, value) in keyvalues.items():
-            postvalue = self._postprocessing(value)
-            if postvalue != None:
-                yield postvalue
+            if postprocess == False:
+                yield value
+            else:
+                postvalue = self._postprocessing(value)
+                if postvalue != None:
+                    yield postvalue
 
     def get(self, keys):
         return {key: self.client.lrange(key, 0, -1) for key in keys}
@@ -52,8 +55,11 @@ class RedisKMeans:
         kmeans = KMeans(n_clusters=n_clusters)
         if KMeansmodel != None:
             kmeans = KMeansmodel
-        keyvalues = self._get(keys)
-        return kmeans.fit_predict(list(self._getValues(keyvalues)))
+        keyvalues = self.get(keys)
+        values = list(self._getValues(keyvalues, postprocess=not tfidf))
+        if tfidf:
+            values = tfidf_transform(values)
+        return kmeans.fit_predict(values)
 
     def _associate(self, clusters, values):
         ''' Associate each cluster with list of values '''
