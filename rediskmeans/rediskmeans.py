@@ -1,15 +1,7 @@
 import redis
 from sklearn.cluster import KMeans
 import struct
-from sklearn.feature_extraction.text import TfidfTransformer
-
-
-class TFIDF:
-    def __init__(self):
-        pass
-
-    def apply(self, data):
-        return TfidfTransformer().fit_transform(data)
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 class RedisKMeans:
 
@@ -23,13 +15,9 @@ class RedisKMeans:
 
     def put(self, key, values):
         #Checker before store in redis need to recogize type of objects in values
-        #If this is float, just store it. If this is string, apply tfidf before
         checker = lambda x: all([isinstance(value, x) for value in values])
-        if checker(float):
+        if checker(float) or checker(string) or checker(int):
             self.client.lpush(key, self._preprocess(values))
-            return
-        elif checker(str):
-            print("A")
             return
         raise TypeError("Not recoginzed type of values")
 
@@ -58,7 +46,7 @@ class RedisKMeans:
         for clustername in clusters.keys():
             self.put(clustername, clusters[clustername])
 
-    def apply(self, keys, n_clusters=2, KMeansmodel=None, title_clusters=[]):
+    def apply(self, keys, n_clusters=2, KMeansmodel=None, title_clusters=[], tfidf=False):
         if len(keys) == 0:
             return
         kmeans = KMeans(n_clusters=n_clusters)
@@ -86,3 +74,8 @@ class RedisKMeans:
         datavalues = self._associate(clusternames, list(self._getValues(self._get(keys))))
         print("Datavalues: ", datavalues)
         self._store_as_clusters(datavalues)
+
+
+def tfidf_transform(X):
+    vectorizer=TfidfVectorizer(min_df=1, max_df=0.9, stop_words='english', decode_error='ignore')
+    return vectorizer.fit_transform(X)
