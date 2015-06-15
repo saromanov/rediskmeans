@@ -22,7 +22,16 @@ class RedisKMeans:
             self.client = redis.Redis(host=addr, port=port)
 
     def put(self, key, values):
-        self.client.lpush(key, self._preprocess(values))
+        #Checker before store in redis need to recogize type of objects in values
+        #If this is float, just store it. If this is string, apply tfidf before
+        checker = lambda x: all([isinstance(value, x) for value in values])
+        if checker(float):
+            self.client.lpush(key, self._preprocess(values))
+            return
+        elif checker(str):
+            print("A")
+            return
+        raise TypeError("Not recoginzed type of values")
 
     def _preprocess(self, values):
         ''' preprocessing before put in redis. Now in the case of non string values'''
