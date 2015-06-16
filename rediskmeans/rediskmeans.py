@@ -58,6 +58,9 @@ class RedisKMeans:
     def get(self, keys):
         return {key: self.client.lrange(key, 0, -1) for key in keys}
 
+    def _get_strings(self, keys):
+        return [self.client.get(key) for key in keys]
+
     def _store_as_clusters(self, clusters):
         ''' After fit in KMeans set values by clusters '''
         for clustername in clusters.keys():
@@ -72,12 +75,13 @@ class RedisKMeans:
         kmeans = KMeans(n_clusters=n_clusters)
         if KMeansmodel is not None:
             kmeans = KMeansmodel
-        keyvalues = self.get(keys)
-        values = list(self._getValues(keyvalues, postprocess=not tfidf))
-        if tfidf:
-            strs = self._flatlist(values)
-            print(strs)
-            values = tfidf_transform(strs)
+        if not tfidf:
+            keyvalues = self.get(keys)
+            values = list(self._getValues(keyvalues, postprocess=not tfidf))
+        else:
+            keyvalues = self._get_strings(keys)
+            values = tfidf_transform(keyvalues)
+            print(values)
         return kmeans.fit_predict(values)
 
     def _flatlist(self, values):
