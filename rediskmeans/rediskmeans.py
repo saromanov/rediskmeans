@@ -30,7 +30,7 @@ class RedisKMeans:
         '''Checker before store in redis need to recogize
            type of objects in values
         '''
-        return all([isinstance(value, x) for value in values])
+        return all([isinstance(value, typ) for value in values])
 
     def _preprocess(self, values):
         ''' Preprocessing before put in redis.
@@ -65,6 +65,8 @@ class RedisKMeans:
     def apply(self, keys, n_clusters=2, KMeansmodel=None,
               title_clusters=[], tfidf=False):
         if len(keys) == 0:
+            return
+        if not self._checker(keys, str):
             return
         kmeans = KMeans(n_clusters=n_clusters)
         if KMeansmodel is not None:
