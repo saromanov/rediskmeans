@@ -19,7 +19,8 @@ class RedisKMeans:
             or as strings - "Simple string"
         '''
         if type(values) == str:
-            self.client.lpush(key, values)
+            if not self.client.exists(key):
+                self.client.append(key, values)
             return
         if self._checker(float) or self._checker(int):
             self.client.lpush(key, self._preprocess(values))
@@ -74,8 +75,17 @@ class RedisKMeans:
         keyvalues = self.get(keys)
         values = list(self._getValues(keyvalues, postprocess=not tfidf))
         if tfidf:
-            values = tfidf_transform(values)
+            strs = self._flatlist(values)
+            print(strs)
+            values = tfidf_transform(strs)
         return kmeans.fit_predict(values)
+
+    def _flatlist(self, values):
+        result = ''
+        for value in values:
+            for v in value:
+                result += str(v) + '.'
+        return result
 
     def _associate(self, clusters, values):
         ''' Associate each cluster with list of values '''
