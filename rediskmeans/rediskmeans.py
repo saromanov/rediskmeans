@@ -18,17 +18,19 @@ class RedisKMeans:
             values can be array of float/int - [0.1,0.2,0.3
             or as strings - "Simple string"
         '''
-
-        # Checker before store in redis need to recogize
-        # type of objects in values
-        checker = lambda x: all([isinstance(value, x) for value in values])
         if type(values) == str:
             self.client.lpush(key, values)
             return
-        if checker(float) or checker(int):
+        if self._checker(float) or self._checker(int):
             self.client.lpush(key, self._preprocess(values))
             return
         raise TypeError("Not recoginzed type of values")
+
+    def _checker(self, values, typ):
+        '''Checker before store in redis need to recogize
+           type of objects in values
+        '''
+        return all([isinstance(value, x) for value in values])
 
     def _preprocess(self, values):
         ''' Preprocessing before put in redis.
