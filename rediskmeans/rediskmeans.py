@@ -16,7 +16,10 @@ class RedisKMeans:
     def put(self, key, values):
         #Checker before store in redis need to recogize type of objects in values
         checker = lambda x: all([isinstance(value, x) for value in values])
-        if checker(float) or checker(str) or checker(int):
+        if type(values) == str:
+            self.client.lpush(key, values)
+            return
+        if checker(float) or checker(int):
             self.client.lpush(key, self._preprocess(values))
             return
         raise TypeError("Not recoginzed type of values")
