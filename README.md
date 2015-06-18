@@ -21,3 +21,7 @@ put()
 rkm.apply_and_store(["ab", "bc", "vd", "er", "ok", "po", "nj", "oi"])
 rkm.get(['cluster0'])
 ```
+
+
+## LICENSE
+MIT
