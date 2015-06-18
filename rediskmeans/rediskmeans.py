@@ -100,8 +100,10 @@ class RedisKMeans:
         else:
             keyvalues = self._get_strings(keys)
             values = tfidf_transform(keyvalues)
-            print(values)
-        return kmeans.fit_predict(values)
+        result = kmeans.fit_predict(values)
+        if title_clusters != [] and len(title_clusters) != n_clusters:
+            raise Exception("Names of clusters can't be greater than number of clusters")
+        return result if title_clusters == [] else [title_clusters[i] for i in result]
 
     def _flatlist(self, values):
         result = ''
