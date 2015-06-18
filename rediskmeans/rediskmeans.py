@@ -120,7 +120,8 @@ class RedisKMeans:
             values = tfidf_transform(keyvalues)
         result = kmeans.fit_predict(values)
         if title_clusters != [] and len(title_clusters) != n_clusters:
-            raise Exception("Names of clusters can't be greater than number of clusters")
+            raise Exception(
+                "Names of clusters can't be greater than number of clusters")
         return result if title_clusters == [] else [title_clusters[i] for i in result]
 
     def _flatlist(self, values):
@@ -142,10 +143,10 @@ class RedisKMeans:
         return result
 
     def apply_and_store(self, keys, n_clusters=2,
-                        KMeansmodel=None, title_clusters=None):
+                        KMeansmodel=None, title_clusters=[], tfidf=False):
         result = self.apply(
             keys, n_clusters=n_clusters,
-            KMeansmodel=KMeansmodel, title_clusters=title_clusters)
+            KMeansmodel=KMeansmodel, title_clusters=title_clusters, tfidf=tfidf)
         clusternames = ['cluster_{0}'.format(num) for num in result]\
             if title_clusters is None\
             else title_clusters
