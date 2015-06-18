@@ -6,6 +6,14 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 class RedisKMeans:
 
     def __init__(self, *args, **kwargs):
+        """
+        Initialization of RedisKMeans
+        Args:
+            addr - host for redis server
+            port - port for redis server
+        Example:
+            RedisKMeans(addr='localhost', port=6739)
+        """
         self.addr = kwargs.get('host')
         self.port = kwargs.get('port')
         if self.addr is None or self.port is None:
@@ -14,9 +22,20 @@ class RedisKMeans:
             self.client = redis.Redis(host=self.addr, port=self.port)
 
     def put(self, key, values):
-        ''' put values to redis
-            values can be array of float/int - [0.1,0.2,0.3
-            or as strings - "Simple string"
+        ''' put values to redis by key
+            Args:
+                key - key can be only as a string
+                values - can be:
+                array of float/int
+                [0.1,0.2,0.3]
+                In that case, values store in the list
+
+                string
+                In the case, strings store as string in redis
+
+            Examples:
+                >>> put("abc", [0.4,0.5,0.6,0.7])
+                >>> put("cba", "This is simple")
         '''
         if type(values) == str:
             if not self.client.exists(key):
