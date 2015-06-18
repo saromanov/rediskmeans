@@ -87,6 +87,24 @@ class RedisKMeans:
 
     def apply(self, keys, n_clusters=2, KMeansmodel=None,
               title_clusters=[], tfidf=False):
+        """ this function provides getting data from redis
+            and transform to clusters.
+
+            Args:
+                keys - Getting data by keys
+
+                n_clusters - Number of clusters to transform data
+
+                KMeansmodel - model for clusterization. Generally, can be any cluster
+                model from sklearn
+
+                title_clusters - After clustering, all clusters marked as numbers.
+                If title_clusters is not empty, this clusters will be replace to names
+                from title_clusters
+
+                tfidf - Apply tfidf before clustering
+        """
+
         if len(keys) == 0:
             return
         if not self._checker(keys, str):
