@@ -1,11 +1,15 @@
 from rediskmeans import RedisKMeans
 import unittest
+import redis
 
 
 NAMES = ["n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11"]
 
 
 class TestClusteringWithTFIDF(unittest.TestCase):
+    def setUp(self):
+        client = redis.Redis()
+        client.delete(NAMES)
 
     def test_basic(self):
         rkm = RedisKMeans()
@@ -32,4 +36,4 @@ class TestClusteringWithTFIDF(unittest.TestCase):
         rkm.put("n11", [0.9, 0.3, 0.1, 0.1, 0.8])
         result = rkm.apply(NAMES, n_clusters=3)
         self.assertEqual(len(result), 11)
-        self.assertEqual(set(result), 3)
+        self.assertEqual(set(result), set((0,1,2)))
