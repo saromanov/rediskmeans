@@ -1,1 +1,1 @@
-from rediskmeans import RedisKMeans
+from rediskmeans.rediskmeans import RedisKMeans
