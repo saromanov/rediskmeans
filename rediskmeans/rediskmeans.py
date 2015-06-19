@@ -41,7 +41,7 @@ class RedisKMeans:
             if not self.client.exists(key):
                 self.client.append(key, values)
             return
-        if self._checker(float) or self._checker(int):
+        if self._checker(values, float) or self._checker(values, int):
             self.client.lpush(key, self._preprocess(values))
             return
         raise TypeError("Not recoginzed type of values")
