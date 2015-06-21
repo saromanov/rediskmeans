@@ -86,7 +86,7 @@ class RedisKMeans:
             self.put(clustername, clusters[clustername])
 
     def apply(self, keys, n_clusters=2, KMeansmodel=None,
-              title_clusters=[], tfidf=False):
+              title_clusters=[], tfidf=False, path=''):
         """ this function provides getting data from redis
             and transform to clusters.
 
@@ -103,7 +103,15 @@ class RedisKMeans:
                 from title_clusters
 
                 tfidf - Apply tfidf before clustering
+
+                path - to file with keys
         """
+
+        if path != '':
+            f = open(path, 'r')
+            keys = [key.split('\n')[0] for key in f.readlines()]
+            print(keys)
+            f.close()
 
         if len(keys) == 0:
             return
