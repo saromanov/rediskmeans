@@ -78,7 +78,7 @@ class RedisKMeans:
         return {key: self.client.lrange(key, 0, -1) for key in keys}
 
     def _get_strings(self, keys):
-        return [self.client.get(key) for key in keys]
+        return [self.client.get(key) for key in keys if self.client.exists(key)]
 
     def _store_as_clusters(self, clusters):
         ''' After fit in KMeans set values by clusters '''
