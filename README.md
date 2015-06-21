@@ -11,6 +11,12 @@ rkm.apply_and_store(["ab", "bc", "vd", "er", "ok", "po", "nj", "oi"])
 rkm.get(['cluster0'])
 ```
 
+Read keys from file
+```python
+rkm = rediskmeans.RedisKMeans()
+rkm.apply_and_store(path="keys")
+rkm.get(['cluster0'])
+```
 
 ## LICENSE
 MIT
