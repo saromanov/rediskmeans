@@ -113,7 +113,7 @@ class RedisKMeans:
             print(keys)
             f.close()
 
-        if len(keys) == 0:
+        if not isinstance(keys, list) or len(keys) == 0:
             return
         if not self._checker(keys, str):
             return
