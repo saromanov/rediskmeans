@@ -132,13 +132,6 @@ class RedisKMeans:
                 "Names of clusters can't be greater than number of clusters")
         return result if title_clusters == [] else [title_clusters[i] for i in result]
 
-    def _flatlist(self, values):
-        result = ''
-        for value in values:
-            for v in value:
-                result += str(v) + '.'
-        return result
-
     def _associate(self, clusters, values):
         ''' Associate each cluster with list of values '''
         result = {}
