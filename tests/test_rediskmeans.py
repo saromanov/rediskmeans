@@ -1,6 +1,7 @@
 from rediskmeans import RedisKMeans
 import unittest
 import redis
+import os
 
 
 NAMES = ["n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11"]
@@ -37,3 +38,10 @@ class TestClusteringWithTFIDF(unittest.TestCase):
         result = rkm.apply(NAMES, n_clusters=3)
         self.assertEqual(len(result), 11)
         self.assertEqual(set(result), set((0,1,2)))
+
+    def test_loading_keys_from_file(self):
+        rkm = RedisKMeans()
+        dirpath = os.path.dirname(os.path.realpath(__file__))
+        result = rkm.apply([], path=dirpath + "/keys", tfidf=True)
+        self.assertEqual(len(result), 4)
+

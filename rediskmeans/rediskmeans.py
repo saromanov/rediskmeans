@@ -110,7 +110,6 @@ class RedisKMeans:
         if path != '':
             f = open(path, 'r')
             keys = [key.split('\n')[0] for key in f.readlines()]
-            print(keys)
             f.close()
 
         if not isinstance(keys, list) or len(keys) == 0:
