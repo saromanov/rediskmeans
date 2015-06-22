@@ -1,4 +1,4 @@
-# rediskmeans
+# rediskmeans [![Build Status](https://travis-ci.org/saromanov/rediskmeans.svg?branch=master)](https://travis-ci.org/saromanov/rediskmeans)
 Get list of keys from redis, group them and get(or put in redis) result clusters.
 
 Experimental
