@@ -135,6 +135,9 @@ class RedisKMeans:
         else:
             keyvalues = self._get_strings(keys)
             values = tfidf_transform(keyvalues)
+        if len(keys) != len(values):
+            raise Exception("Number of keys is not equal to number of values")
+
         result = kmeans.fit_predict(values)
         if title_clusters != [] and len(title_clusters) != n_clusters:
             raise Exception(
