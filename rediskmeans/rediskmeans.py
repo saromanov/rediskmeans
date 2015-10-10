@@ -162,7 +162,6 @@ class RedisKMeans:
             else title_clusters
         datavalues = self._associate(clusternames,
                                      list(self._getValues(self.get(keys))))
-        print("Datavalues: ", datavalues)
         self._store_as_clusters(datavalues)
 
 
