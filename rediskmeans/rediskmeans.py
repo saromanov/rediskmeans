@@ -1,6 +1,7 @@
 import redis
 from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import TfidfVectorizer
+import os
 
 
 class RedisKMeans:
@@ -21,7 +22,7 @@ class RedisKMeans:
         else:
             self.client = redis.Redis(host=self.addr, port=self.port)
 
-    def put(self, key, values):
+    def put(self, key, values, path=None):
         ''' put values to redis by key
             Args:
                 key - key can be only as a string
@@ -33,10 +34,19 @@ class RedisKMeans:
                 string
                 In the case, strings store as string in redis
 
+                optional arguments:
+                    path - provides path to file. Data from file using as value
+
             Examples:
                 >>> put("abc", [0.4,0.5,0.6,0.7])
                 >>> put("cba", "This is simple")
         '''
+        if path is not None:
+            f = open(path, 'r')
+            if not os.path.exists:
+                raise Exception("File is not found")
+            values = f.read()
+            f.close()
         if type(values) == str:
             if not self.client.exists(key):
                 self.client.append(key, values)
