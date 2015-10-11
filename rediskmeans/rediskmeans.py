@@ -56,6 +56,14 @@ class RedisKMeans:
             return
         raise TypeError("Not recoginzed type of values")
 
+    def putPrefix(self, key, values, path=None):
+        '''
+           put data to redis with prefix "rk_"
+           It helps to clustering data without naming of key
+        '''
+        key = 'rk_{0}'.format(key)
+        self.put(key, values, path=path)
+
     def _checker(self, values, typ):
         '''Checker before store in redis need to recogize
            type of objects in values
