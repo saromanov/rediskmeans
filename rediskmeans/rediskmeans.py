@@ -107,7 +107,7 @@ class RedisKMeans:
             self.put(clustername, clusters[clustername])
 
     def apply(self, keys, n_clusters=2, KMeansmodel=None,
-              title_clusters=[], tfidf=False, path=''):
+              title_clusters=[], tfidf=False, path='', state=None):
         """ this function provides getting data from redis
             and transform to clusters.
 
@@ -126,6 +126,8 @@ class RedisKMeans:
                 tfidf - Apply tfidf before clustering
 
                 path - to file with keys
+
+                state - apply target state for clustering. By default is random state
         """
 
         if path != '':
@@ -137,9 +139,12 @@ class RedisKMeans:
             return
         if not self._checker(keys, str):
             return
-        kmeans = KMeans(n_clusters=n_clusters)
+        kmeans = KMeans(n_clusters=n_clusters, n_jobs=-1)
         if KMeansmodel is not None:
             kmeans = KMeansmodel
+        if state is not None:
+            kmeans = KMeans(n_clusters=n_clusters, n_jobs=-1, random_state=state)
+        if KMeansmodel is not None:
         if not tfidf:
             keyvalues = self.get(keys)
             values = list(self._getValues(keyvalues, postprocess=not tfidf))
