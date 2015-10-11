@@ -2,6 +2,7 @@ import redis
 from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import TfidfVectorizer
 import os
+import numpy as np
 
 
 class RedisKMeans:
@@ -142,6 +143,7 @@ class RedisKMeans:
         if not tfidf:
             keyvalues = self.get(keys)
             values = list(self._getValues(keyvalues, postprocess=not tfidf))
+            values = np.array(values)/np.max(values)
         else:
             keyvalues = self._get_strings(keys)
             values = tfidf_transform(keyvalues)
