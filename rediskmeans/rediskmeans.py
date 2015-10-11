@@ -143,8 +143,7 @@ class RedisKMeans:
         if KMeansmodel is not None:
             kmeans = KMeansmodel
         if state is not None:
-            kmeans = KMeans(n_clusters=n_clusters, n_jobs=-1, random_state=state)
-        if KMeansmodel is not None:
+            kmeans = KMeans(n_clusters=n_clusters, n_jobs=-1)
         if not tfidf:
             keyvalues = self.get(keys)
             values = list(self._getValues(keyvalues, postprocess=not tfidf))
