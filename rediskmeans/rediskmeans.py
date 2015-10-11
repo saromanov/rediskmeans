@@ -25,14 +25,15 @@ class RedisKMeans:
     def put(self, key, values, path=None):
         ''' put values to redis by key
             Args:
-                key - key can be only as a string
+                key - can be only as a string
                 values - can be:
+
                 array of float/int
                 [0.1,0.2,0.3]
-                In that case, values store in the list
+                In this case, values store in the list
 
                 string
-                In the case, strings store as string in redis
+                In this case, strings store as string type in redis
 
                 optional arguments:
                     path - provides path to file. Data from file using as value
@@ -40,6 +41,7 @@ class RedisKMeans:
             Examples:
                 >>> put("abc", [0.4,0.5,0.6,0.7])
                 >>> put("cba", "This is simple")
+                >>> put("def", None, path="/home/username/file")
         '''
         if path is not None:
             f = open(path, 'r')
